@@ -4,16 +4,16 @@ export type Terminals = {
 	arrayStart: number
 	arrayEnd: number
 
-	objectStart: number 
+	objectStart: number
 	objectEnd: number
 	
-	byte: number 
+	byte: number
 	short: number
 	int: number
 	long: number
 
 	float: number
-	double: number 
+	double: number
 
 	booleanTrue: number
 	booleanFalse: number
