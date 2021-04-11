@@ -1,3 +1,4 @@
+import fs from 'fs';
 import { Terminals } from "../types";
 import GON from "..";
 
@@ -43,6 +44,9 @@ describe('Encoder', () => {
     const expected = Buffer.from([terms.null]);
     const actual = parser.encode(inputData);
 
+    const path = __dirname + '/../../build/';
+    fs.writeFileSync(path + "null_test.bin", actual, 'binary');
+    
     expect(actual).toEqual(expected);
   });
 });
