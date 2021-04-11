@@ -30,9 +30,14 @@ export type Terminals = {
 export type Config = {
 	terminals: Terminals
 }
-export type Parser = {
+export interface Serializer<T extends (Buffer | string)> {
+	encode (obj: any): T
+	decode (buff: T): any
+	contentType: string
+}
+
+export type GONSerializer = Serializer<Buffer> & {
 	decode(buffer: Buffer): any
 	decode(stream: Readable): Promise<any>
-
-	encode(value: any): Buffer
 }
+  

@@ -1,11 +1,11 @@
 import { Readable } from "stream";
-import { Config, Parser } from "./types";
+import { Config, GONSerializer } from "./types";
 import { encoder } from "./encoder";
 
 export default (config: Config) => {
 	return {
 		encode: (value: any) => {
-      return Buffer.from(encoder(config, value));
+      		return Buffer.from(encoder(config, value));
 		},
 		decode: (value: Readable | Buffer) => {
 			if(Buffer.isBuffer(value)) {
@@ -13,6 +13,7 @@ export default (config: Config) => {
 			} else {
 				return Promise.resolve(undefined)
 			}
-		}
-	} as Parser
+		},
+		contentType: 'application/octet-stream'
+	} as GONSerializer
 }
