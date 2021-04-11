@@ -1,5 +1,5 @@
-import { Terminals } from "../src/types";
-import GON from "../src";
+import { Terminals } from "../types";
+import GON from "..";
 
 const terms: Terminals = {
   arrayStart: 0xF0,
