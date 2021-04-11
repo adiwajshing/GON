@@ -1,3 +1,5 @@
+import { Readable, Stream } from "stream"
+
 export type Terminals = {
 	arrayStart: number
 	arrayEnd: number
@@ -20,4 +22,10 @@ export type Terminals = {
 }
 export type Config = {
 	terminals: Terminals
+}
+export type Parser = {
+	decode(buffer: Buffer): any
+	decode(stream: Readable): Promise<any>
+
+	encode(value: any): Buffer
 }
