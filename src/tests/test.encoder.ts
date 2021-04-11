@@ -40,7 +40,7 @@ beforeAll(() => {
 describe('Encoder', () => {
   it('Should encode null', () => {
     let inputData = null;
-    const expected = Buffer.from([0xD0]);
+    const expected = Buffer.from([terms.null]);
     const actual = parser.encode(inputData);
 
     expect(actual).toEqual(expected);
