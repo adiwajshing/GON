@@ -2,6 +2,7 @@
 const CFG = require('./inputs/cfg.json')
 const {convertToNFA, nfaMetadata} = require('./cfg-to-nfa')
 const {convertToDFA} = require('./nfa-to-dfa')
+const {convertToGrafify} = require('./automata-to-grafify')
 const fs = require('fs')
 
 // generate the NFA
@@ -32,6 +33,12 @@ fs.writeFileSync(
     './grammar/outputs/dfa.json',
     JSON.stringify(DFA, undefined, 2)
 )
+
+fs.writeFileSync(
+	'./grammar/outputs/grafify.json',
+	JSON.stringify(convertToGrafify(DFA), undefined, 2)
+)
+
 console.log('converted to DFA, verifying DCFG...')
 
 // verify
