@@ -1,0 +1,16 @@
+{
+	"S": ["V"],
+	"V": ["O", "A", "N", "B", "Str"],
+	"N": ["I", "F"],
+	"I": ["t0 T", "t1 T T", "t2 T T T T", "t3 T T T T T T T T"],
+	"F": ["t4 T T T T", "t5 T T T T T T T T"],
+	"B": ["t6", "t7"],
+	"A": ["t8 Ai t9"],
+	"Ai": ["V", "Ai V", "e"],
+	"O": ["t10 Oi t11"],
+	"Oi": ["Str V", "Oi Str V", "e"],
+	"Str": ["t12 P 0"],
+	"P": ["T0", "P T0", "e"],
+	"T0": ["k"],
+	"T1": ["0", "T0"]
+}
