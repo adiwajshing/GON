@@ -49,4 +49,26 @@ describe('Encoder', () => {
     
     expect(actual).toEqual(expected);
   });
+
+  it('Should encode boolean true', () => {
+    let inputData = true;
+    const expected = Buffer.from([terms.booleanTrue]);
+    const actual = parser.encode(inputData);
+
+    const path = __dirname + '/../../build/';
+    fs.writeFileSync(path + "true_test.bin", actual, 'binary');
+    
+    expect(actual).toEqual(expected);
+  });
+
+  it('Should encode boolean false', () => {
+    let inputData = false;
+    const expected = Buffer.from([terms.booleanFalse]);
+    const actual = parser.encode(inputData);
+
+    const path = __dirname + '/../../build/';
+    fs.writeFileSync(path + "false_test.bin", actual, 'binary');
+    
+    expect(actual).toEqual(expected);
+  });
 });
