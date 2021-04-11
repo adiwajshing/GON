@@ -41,9 +41,7 @@ describe('Encoder', () => {
   it('Should encode null', () => {
     let inputData = null;
     const expected = Buffer.from([0xD0]);
-    const actual = GON({
-      terminals: terms
-    }).encode(inputData);
+    const actual = parser.encode(inputData);
 
     expect(actual).toEqual(expected);
   });
