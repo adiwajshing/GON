@@ -2,7 +2,7 @@
   "A ->  . t8 Ai t9,Ai ->  . Ai V,Ai ->  . V,Ai ->  . e,Ai -> e . ,B ->  . t6,B ->  . t7,F ->  . t4 T T T T,F ->  . t5 T T T T T T T T,I ->  . t0 T,I ->  . t1 T T,I ->  . t2 T T T T,I ->  . t3 T T T T T T T T,N ->  . F,N ->  . I,O ->  . t10 Oi t11,Oi ->  . Oi Str V,Oi ->  . Str V,Oi ->  . e,Oi -> e . ,P ->  . P T0,P ->  . T0,P ->  . e,P -> e . ,S ->  . V,Str ->  . t12 P 0,T0 ->  . k,T1 ->  . 0,T1 ->  . T0,V ->  . A,V ->  . B,V ->  . N,V ->  . O,V ->  . Str,q0": {
     "0": "T1 -> 0 . ",
     "t8": "A -> t8 . Ai t9",
-    "Ai": "Ai -> Ai . V",
+    "Ai": "A ->  . t8 Ai t9,Ai -> Ai . V,B ->  . t6,B ->  . t7,F ->  . t4 T T T T,F ->  . t5 T T T T T T T T,I ->  . t0 T,I ->  . t1 T T,I ->  . t2 T T T T,I ->  . t3 T T T T T T T T,N ->  . F,N ->  . I,O ->  . t10 Oi t11,V ->  . A,V ->  . B,V ->  . N,V ->  . O,V ->  . Str",
     "V": "Ai -> V . ,S -> V . ",
     "t6": "B -> t6 . ",
     "t7": "B -> t7 . ",
@@ -16,10 +16,10 @@
     "I": "N -> I . ",
     "t10": "O -> t10 . Oi t11",
     "Oi": "Oi -> Oi . Str V",
-    "Str": "Oi -> Str . V,V -> Str . ",
-    "P": "P -> P . T0",
+    "Str": "A ->  . t8 Ai t9,B ->  . t6,B ->  . t7,F ->  . t4 T T T T,F ->  . t5 T T T T T T T T,I ->  . t0 T,I ->  . t1 T T,I ->  . t2 T T T T,I ->  . t3 T T T T T T T T,N ->  . F,N ->  . I,O ->  . t10 Oi t11,Oi -> Str . V,V ->  . A,V ->  . B,V ->  . N,V ->  . O,V ->  . Str,V -> Str . ",
+    "P": "P -> P . T0,T0 ->  . k",
     "T0": "P -> T0 . ,T1 -> T0 . ",
-    "t12": "Str -> t12 . P 0",
+    "t12": "P ->  . P T0,P ->  . T0,P ->  . e,P -> e . ,Str -> t12 . P 0,T0 ->  . k",
     "k": "T0 -> k . ",
     "A": "V -> A . ",
     "B": "V -> B . ",
@@ -40,13 +40,27 @@
   "A -> t8 Ai t9 . ": {
     "accepting": true
   },
-  "Ai -> Ai . V": {
-    "V": "Ai -> Ai V . "
+  "A ->  . t8 Ai t9,Ai -> Ai . V,B ->  . t6,B ->  . t7,F ->  . t4 T T T T,F ->  . t5 T T T T T T T T,I ->  . t0 T,I ->  . t1 T T,I ->  . t2 T T T T,I ->  . t3 T T T T T T T T,N ->  . F,N ->  . I,O ->  . t10 Oi t11,V ->  . A,V ->  . B,V ->  . N,V ->  . O,V ->  . Str": {
+    "t8": "A -> t8 . Ai t9",
+    "V": "Ai -> Ai V . ",
+    "t6": "B -> t6 . ",
+    "t7": "B -> t7 . ",
+    "t4": "F -> t4 . T T T T",
+    "t5": "F -> t5 . T T T T T T T T",
+    "t0": "I -> t0 . T",
+    "t1": "I -> t1 . T T",
+    "t2": "I -> t2 . T T T T",
+    "t3": "I -> t3 . T T T T T T T T",
+    "F": "N -> F . ",
+    "I": "N -> I . ",
+    "t10": "O -> t10 . Oi t11",
+    "A": "V -> A . ",
+    "B": "V -> B . ",
+    "N": "V -> N . ",
+    "O": "V -> O . ",
+    "Str": "V -> Str . "
   },
   "Ai -> Ai V . ": {
-    "accepting": true
-  },
-  "Ai -> V . ,S -> V . ": {
     "accepting": true
   },
   "B -> t6 . ": {
@@ -169,43 +183,6 @@
   "O -> t10 Oi t11 . ": {
     "accepting": true
   },
-  "Oi -> Oi . Str V": {
-    "Str": "Oi -> Oi Str . V"
-  },
-  "Oi -> Oi Str . V": {
-    "V": "Oi -> Oi Str V . "
-  },
-  "Oi -> Oi Str V . ": {
-    "accepting": true
-  },
-  "Oi -> Str . V,V -> Str . ": {
-    "V": "Oi -> Str V . ",
-    "accepting": true
-  },
-  "Oi -> Str V . ": {
-    "accepting": true
-  },
-  "P -> P . T0": {
-    "T0": "P -> P T0 . "
-  },
-  "P -> P T0 . ": {
-    "accepting": true
-  },
-  "P -> T0 . ,T1 -> T0 . ": {
-    "accepting": true
-  },
-  "Str -> t12 . P 0": {
-    "P": "Str -> t12 P . 0"
-  },
-  "Str -> t12 P . 0": {
-    "0": "Str -> t12 P 0 . "
-  },
-  "Str -> t12 P 0 . ": {
-    "accepting": true
-  },
-  "T0 -> k . ": {
-    "accepting": true
-  },
   "V -> A . ": {
     "accepting": true
   },
@@ -216,6 +193,92 @@
     "accepting": true
   },
   "V -> O . ": {
+    "accepting": true
+  },
+  "V -> Str . ": {
+    "accepting": true
+  },
+  "Ai -> V . ,S -> V . ": {
+    "accepting": true
+  },
+  "Oi -> Oi . Str V": {
+    "Str": "A ->  . t8 Ai t9,B ->  . t6,B ->  . t7,F ->  . t4 T T T T,F ->  . t5 T T T T T T T T,I ->  . t0 T,I ->  . t1 T T,I ->  . t2 T T T T,I ->  . t3 T T T T T T T T,N ->  . F,N ->  . I,O ->  . t10 Oi t11,Oi -> Oi Str . V,V ->  . A,V ->  . B,V ->  . N,V ->  . O,V ->  . Str"
+  },
+  "A ->  . t8 Ai t9,B ->  . t6,B ->  . t7,F ->  . t4 T T T T,F ->  . t5 T T T T T T T T,I ->  . t0 T,I ->  . t1 T T,I ->  . t2 T T T T,I ->  . t3 T T T T T T T T,N ->  . F,N ->  . I,O ->  . t10 Oi t11,Oi -> Oi Str . V,V ->  . A,V ->  . B,V ->  . N,V ->  . O,V ->  . Str": {
+    "t8": "A -> t8 . Ai t9",
+    "t6": "B -> t6 . ",
+    "t7": "B -> t7 . ",
+    "t4": "F -> t4 . T T T T",
+    "t5": "F -> t5 . T T T T T T T T",
+    "t0": "I -> t0 . T",
+    "t1": "I -> t1 . T T",
+    "t2": "I -> t2 . T T T T",
+    "t3": "I -> t3 . T T T T T T T T",
+    "F": "N -> F . ",
+    "I": "N -> I . ",
+    "t10": "O -> t10 . Oi t11",
+    "V": "Oi -> Oi Str V . ",
+    "A": "V -> A . ",
+    "B": "V -> B . ",
+    "N": "V -> N . ",
+    "O": "V -> O . ",
+    "Str": "V -> Str . "
+  },
+  "Oi -> Oi Str V . ": {
+    "accepting": true
+  },
+  "A ->  . t8 Ai t9,B ->  . t6,B ->  . t7,F ->  . t4 T T T T,F ->  . t5 T T T T T T T T,I ->  . t0 T,I ->  . t1 T T,I ->  . t2 T T T T,I ->  . t3 T T T T T T T T,N ->  . F,N ->  . I,O ->  . t10 Oi t11,Oi -> Str . V,V ->  . A,V ->  . B,V ->  . N,V ->  . O,V ->  . Str,V -> Str . ": {
+    "t8": "A -> t8 . Ai t9",
+    "t6": "B -> t6 . ",
+    "t7": "B -> t7 . ",
+    "t4": "F -> t4 . T T T T",
+    "t5": "F -> t5 . T T T T T T T T",
+    "t0": "I -> t0 . T",
+    "t1": "I -> t1 . T T",
+    "t2": "I -> t2 . T T T T",
+    "t3": "I -> t3 . T T T T T T T T",
+    "F": "N -> F . ",
+    "I": "N -> I . ",
+    "t10": "O -> t10 . Oi t11",
+    "V": "Oi -> Str V . ",
+    "A": "V -> A . ",
+    "B": "V -> B . ",
+    "N": "V -> N . ",
+    "O": "V -> O . ",
+    "Str": "V -> Str . ",
+    "accepting": true
+  },
+  "Oi -> Str V . ": {
+    "accepting": true
+  },
+  "P -> P . T0,T0 ->  . k": {
+    "T0": "P -> P T0 . ",
+    "k": "T0 -> k . "
+  },
+  "P -> P T0 . ": {
+    "accepting": true
+  },
+  "T0 -> k . ": {
+    "accepting": true
+  },
+  "P -> T0 . ,T1 -> T0 . ": {
+    "accepting": true
+  },
+  "P ->  . P T0,P ->  . T0,P ->  . e,P -> e . ,Str -> t12 . P 0,T0 ->  . k": {
+    "P": "P -> P . T0,Str -> t12 P . 0,T0 ->  . k",
+    "T0": "P -> T0 . ",
+    "k": "T0 -> k . ",
+    "accepting": true
+  },
+  "P -> P . T0,Str -> t12 P . 0,T0 ->  . k": {
+    "0": "Str -> t12 P 0 . ",
+    "T0": "P -> P T0 . ",
+    "k": "T0 -> k . "
+  },
+  "Str -> t12 P 0 . ": {
+    "accepting": true
+  },
+  "P -> T0 . ": {
     "accepting": true
   }
 }

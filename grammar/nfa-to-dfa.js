@@ -15,7 +15,9 @@ module.exports.convertToDFA = (nfa) => {
 	
 	const evaluateState = (state, onlyEpsilons) => {
 		const transitions = onlyEpsilons ? [ 'e' ] : getTransitionKeys(state)
-		if(onlyEpsilons && !state['e']) return { 'e': [] }
+		if(onlyEpsilons && !state['e']) {
+			return { 'e': [] }
+		}
 		
 		return transitions.reduce((s, transition) => {
 			const states = typeof state[transition] === 'string' ? [ state[transition] ] : state[transition]

@@ -1,9 +1,16 @@
-const CFG = require('./cfg.json')
-const {convertToNFA} = require('./cfg-to-nfa')
+const CFG = require('./inputs/cfg.json')
+const {convertToNFA, nfaMetadata} = require('./cfg-to-nfa')
 const {convertToDFA} = require('./nfa-to-dfa')
 const fs = require('fs')
 
 const NFA = convertToNFA(CFG)
+// save NFA
+fs.writeFileSync(
+    './grammar/outputs/nfa.json',
+    JSON.stringify(NFA, undefined, 2)
+)
+console.log('NFA metadata', nfaMetadata(NFA))
+
 NFA['q'] = { // hack to make parsing easier
     a: 'q0',
     startingState: true
@@ -14,7 +21,7 @@ DFA[trueState].startingState = true
 delete DFA['q']
 
 fs.writeFileSync(
-    './grammar/cfg-dfa.json',
+    './grammar/outputs/dfa.json',
     JSON.stringify(DFA, undefined, 2)
 )
 console.log('converted to DFA, verifying DCFG...')
