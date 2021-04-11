@@ -18,7 +18,14 @@ export type Terminals = {
 	booleanTrue: number
 	booleanFalse: number
 
-	string: number
+  string: number
+  
+  null: number
+  backspace: number
+  htab: number
+  linefeed: number
+  formfeed: number
+  carriagereturn: number
 }
 export type Config = {
 	terminals: Terminals
