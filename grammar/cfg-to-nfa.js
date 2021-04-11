@@ -16,7 +16,7 @@ const convertToNFA = (cfg) => {
 		const getStateStr = i => prod + ' -> ' + states.slice(0, i).join(' ') + ' . ' + states.slice(i).join(' ')
 		const addedEpsilonRules = {}
 		const states = str.split(' ')
-		if(!epsilon)
+		if(!epsilon && prod === 'S') // only for S
 			addRule('q0', 'e', getStateStr(0))
 
 		for(let i = 0;i < states.length;i++) {
@@ -25,8 +25,7 @@ const convertToNFA = (cfg) => {
 				const isNonTerminal = states[i].toUpperCase() === states[i]
 				if(
 					isNonTerminal && 
-					!addedEpsilonRules[states[i]] &&
-					states[i] !== prod
+					!addedEpsilonRules[states[i]]
 				) {
 					for(const rule of Object.keys(nfa)) {
 						if(rule.startsWith(`${states[i]} ->  . `)) {
