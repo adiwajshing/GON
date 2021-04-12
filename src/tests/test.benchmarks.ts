@@ -3,6 +3,7 @@ import createRandomObj from "./createRandomObj"
 import { JSONSerializer, V8Serializer } from "./Serializers";
 import GONSerializer from "../";
 import DefaultConfig from "../default-config";
+import { writeFileSync } from "fs";
 
 type TestType = {
     [obj: string]: { 
@@ -88,10 +89,10 @@ const testDeserialization = (method: string, serializer: Serializer<Buffer | str
     total /= TEST_VECTORS.length
     console.log (`[${method}] avg decoding took ${total}ms`)
 
-    if(print) console.log(
-        JSON.stringify(testResults, undefined, 2)
-    )
-    
+    if(print) {
+        const output = JSON.stringify(testResults, undefined, 2)
+        writeFileSync('./src/tests/bench-results.json', output)
+    }
 }
 
 describe ('Benchmark Tests', () => {
