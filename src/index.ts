@@ -1,11 +1,13 @@
 import { Readable } from "stream";
 import { Config, GONSerializer } from "./types";
-import { encoder } from "./encoder";
+import encode from "./encode";
 
 export default (config: Config) => {
 	return {
 		encode: (value: any) => {
-      		return Buffer.from(encoder(config, value));
+			const encArr: number[] = []
+			encode(config, value, encArr)
+			return Buffer.from(encArr)
 		},
 		decode: (value: Readable | Buffer) => {
 			if(Buffer.isBuffer(value)) {

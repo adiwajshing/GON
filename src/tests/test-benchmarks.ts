@@ -1,7 +1,7 @@
 import { Serializer } from "../types";
 import createRandomObj from "./createRandomObj"
 import { JSONSerializer, V8Serializer } from "./Serializers";
-import GONSerializer from "../";
+import GONSerializer from "..";
 import DefaultConfig from "../default-config";
 import { writeFileSync } from "fs";
 
