@@ -1,12 +1,6 @@
 import GON from "..";
 import DefaultConfig from '../default-config'
 
-let parser
-
-beforeAll(() => {
-  parser = GON(DefaultConfig)
-})
-
 describe('Encoder', () => {
   it('Should encode single terminals', () => {
     const TEST_VECTORS = [
@@ -15,7 +9,7 @@ describe('Encoder', () => {
       { input: false, output: DefaultConfig.terminals.booleanFalse },
     ]
     for(const { input, output } of TEST_VECTORS) {
-      const actual = parser.encode(input)
+      const actual = GON.encode(input)
       //const path = __dirname + '/../../build/'
       //fs.writeFileSync(path + "null_test.bin", actual, 'binary')
       
