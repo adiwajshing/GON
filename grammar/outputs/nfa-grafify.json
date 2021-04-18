@@ -1,0 +1,773 @@
+{
+  "nodes": [
+    {
+      "id": "q0"
+    },
+    {
+      "id": "S ->  . V"
+    },
+    {
+      "id": "S -> V . "
+    },
+    {
+      "id": "V ->  . O"
+    },
+    {
+      "id": "V ->  . A"
+    },
+    {
+      "id": "V ->  . N"
+    },
+    {
+      "id": "V ->  . B"
+    },
+    {
+      "id": "V ->  . Str"
+    },
+    {
+      "id": "V -> O . "
+    },
+    {
+      "id": "O ->  . t10 Oi t11"
+    },
+    {
+      "id": "V -> A . "
+    },
+    {
+      "id": "A ->  . t8 Ai t9"
+    },
+    {
+      "id": "V -> N . "
+    },
+    {
+      "id": "N ->  . I"
+    },
+    {
+      "id": "N ->  . F"
+    },
+    {
+      "id": "V -> B . "
+    },
+    {
+      "id": "B ->  . t6"
+    },
+    {
+      "id": "B ->  . t7"
+    },
+    {
+      "id": "V -> Str . "
+    },
+    {
+      "id": "N -> I . "
+    },
+    {
+      "id": "I ->  . t0 T"
+    },
+    {
+      "id": "I ->  . t1 T T"
+    },
+    {
+      "id": "I ->  . t2 T T T T"
+    },
+    {
+      "id": "I ->  . t3 T T T T T T T T"
+    },
+    {
+      "id": "N -> F . "
+    },
+    {
+      "id": "F ->  . t4 T T T T"
+    },
+    {
+      "id": "F ->  . t5 T T T T T T T T"
+    },
+    {
+      "id": "I -> t0 . T"
+    },
+    {
+      "id": "I -> t0 T . "
+    },
+    {
+      "id": "I -> t1 . T T"
+    },
+    {
+      "id": "I -> t1 T . T"
+    },
+    {
+      "id": "I -> t1 T T . "
+    },
+    {
+      "id": "I -> t2 . T T T T"
+    },
+    {
+      "id": "I -> t2 T . T T T"
+    },
+    {
+      "id": "I -> t2 T T . T T"
+    },
+    {
+      "id": "I -> t2 T T T . T"
+    },
+    {
+      "id": "I -> t2 T T T T . "
+    },
+    {
+      "id": "I -> t3 . T T T T T T T T"
+    },
+    {
+      "id": "I -> t3 T . T T T T T T T"
+    },
+    {
+      "id": "I -> t3 T T . T T T T T T"
+    },
+    {
+      "id": "I -> t3 T T T . T T T T T"
+    },
+    {
+      "id": "I -> t3 T T T T . T T T T"
+    },
+    {
+      "id": "I -> t3 T T T T T . T T T"
+    },
+    {
+      "id": "I -> t3 T T T T T T . T T"
+    },
+    {
+      "id": "I -> t3 T T T T T T T . T"
+    },
+    {
+      "id": "I -> t3 T T T T T T T T . "
+    },
+    {
+      "id": "F -> t4 . T T T T"
+    },
+    {
+      "id": "F -> t4 T . T T T"
+    },
+    {
+      "id": "F -> t4 T T . T T"
+    },
+    {
+      "id": "F -> t4 T T T . T"
+    },
+    {
+      "id": "F -> t4 T T T T . "
+    },
+    {
+      "id": "F -> t5 . T T T T T T T T"
+    },
+    {
+      "id": "F -> t5 T . T T T T T T T"
+    },
+    {
+      "id": "F -> t5 T T . T T T T T T"
+    },
+    {
+      "id": "F -> t5 T T T . T T T T T"
+    },
+    {
+      "id": "F -> t5 T T T T . T T T T"
+    },
+    {
+      "id": "F -> t5 T T T T T . T T T"
+    },
+    {
+      "id": "F -> t5 T T T T T T . T T"
+    },
+    {
+      "id": "F -> t5 T T T T T T T . T"
+    },
+    {
+      "id": "F -> t5 T T T T T T T T . "
+    },
+    {
+      "id": "B -> t6 . "
+    },
+    {
+      "id": "B -> t7 . "
+    },
+    {
+      "id": "A -> t8 . Ai t9"
+    },
+    {
+      "id": "A -> t8 Ai . t9"
+    },
+    {
+      "id": "A -> t8 Ai t9 . "
+    },
+    {
+      "id": "Ai ->  . V"
+    },
+    {
+      "id": "Ai -> V . "
+    },
+    {
+      "id": "Ai ->  . Ai V"
+    },
+    {
+      "id": "Ai -> Ai . V"
+    },
+    {
+      "id": "Ai -> Ai V . "
+    },
+    {
+      "id": "Ai ->  . e"
+    },
+    {
+      "id": "Ai -> e . "
+    },
+    {
+      "id": "O -> t10 . Oi t11"
+    },
+    {
+      "id": "O -> t10 Oi . t11"
+    },
+    {
+      "id": "O -> t10 Oi t11 . "
+    },
+    {
+      "id": "Oi ->  . Str V"
+    },
+    {
+      "id": "Oi -> Str . V"
+    },
+    {
+      "id": "Oi -> Str V . "
+    },
+    {
+      "id": "Oi ->  . Oi Str V"
+    },
+    {
+      "id": "Oi -> Oi . Str V"
+    },
+    {
+      "id": "Oi -> Oi Str . V"
+    },
+    {
+      "id": "Oi -> Oi Str V . "
+    },
+    {
+      "id": "Oi ->  . e"
+    },
+    {
+      "id": "Oi -> e . "
+    },
+    {
+      "id": "Str ->  . t12 P 0"
+    },
+    {
+      "id": "Str -> t12 . P 0"
+    },
+    {
+      "id": "Str -> t12 P . 0"
+    },
+    {
+      "id": "P ->  . T0"
+    },
+    {
+      "id": "P ->  . P T0"
+    },
+    {
+      "id": "P ->  . e"
+    },
+    {
+      "id": "Str -> t12 P 0 . "
+    },
+    {
+      "id": "P -> T0 . "
+    },
+    {
+      "id": "T0 ->  . k"
+    },
+    {
+      "id": "P -> P . T0"
+    },
+    {
+      "id": "P -> P T0 . "
+    },
+    {
+      "id": "P -> e . "
+    },
+    {
+      "id": "T0 -> k . "
+    },
+    {
+      "id": "T1 ->  . 0"
+    },
+    {
+      "id": "T1 -> 0 . "
+    },
+    {
+      "id": "T1 ->  . T0"
+    },
+    {
+      "id": "T1 -> T0 . "
+    }
+  ],
+  "edges": [
+    {
+      "source": "q0",
+      "target": "S ->  . V"
+    },
+    {
+      "source": "S ->  . V",
+      "target": "S -> V . "
+    },
+    {
+      "source": "S ->  . V",
+      "target": "V ->  . O"
+    },
+    {
+      "source": "S ->  . V",
+      "target": "V ->  . A"
+    },
+    {
+      "source": "S ->  . V",
+      "target": "V ->  . N"
+    },
+    {
+      "source": "S ->  . V",
+      "target": "V ->  . B"
+    },
+    {
+      "source": "S ->  . V",
+      "target": "V ->  . Str"
+    },
+    {
+      "source": "V ->  . O",
+      "target": "V -> O . "
+    },
+    {
+      "source": "V ->  . O",
+      "target": "O ->  . t10 Oi t11"
+    },
+    {
+      "source": "V ->  . A",
+      "target": "V -> A . "
+    },
+    {
+      "source": "V ->  . A",
+      "target": "A ->  . t8 Ai t9"
+    },
+    {
+      "source": "V ->  . N",
+      "target": "V -> N . "
+    },
+    {
+      "source": "V ->  . N",
+      "target": "N ->  . I"
+    },
+    {
+      "source": "V ->  . N",
+      "target": "N ->  . F"
+    },
+    {
+      "source": "V ->  . B",
+      "target": "V -> B . "
+    },
+    {
+      "source": "V ->  . B",
+      "target": "B ->  . t6"
+    },
+    {
+      "source": "V ->  . B",
+      "target": "B ->  . t7"
+    },
+    {
+      "source": "V ->  . Str",
+      "target": "V -> Str . "
+    },
+    {
+      "source": "N ->  . I",
+      "target": "N -> I . "
+    },
+    {
+      "source": "N ->  . I",
+      "target": "I ->  . t0 T"
+    },
+    {
+      "source": "N ->  . I",
+      "target": "I ->  . t1 T T"
+    },
+    {
+      "source": "N ->  . I",
+      "target": "I ->  . t2 T T T T"
+    },
+    {
+      "source": "N ->  . I",
+      "target": "I ->  . t3 T T T T T T T T"
+    },
+    {
+      "source": "N ->  . F",
+      "target": "N -> F . "
+    },
+    {
+      "source": "N ->  . F",
+      "target": "F ->  . t4 T T T T"
+    },
+    {
+      "source": "N ->  . F",
+      "target": "F ->  . t5 T T T T T T T T"
+    },
+    {
+      "source": "I ->  . t0 T",
+      "target": "I -> t0 . T"
+    },
+    {
+      "source": "I -> t0 . T",
+      "target": "I -> t0 T . "
+    },
+    {
+      "source": "I ->  . t1 T T",
+      "target": "I -> t1 . T T"
+    },
+    {
+      "source": "I -> t1 . T T",
+      "target": "I -> t1 T . T"
+    },
+    {
+      "source": "I -> t1 T . T",
+      "target": "I -> t1 T T . "
+    },
+    {
+      "source": "I ->  . t2 T T T T",
+      "target": "I -> t2 . T T T T"
+    },
+    {
+      "source": "I -> t2 . T T T T",
+      "target": "I -> t2 T . T T T"
+    },
+    {
+      "source": "I -> t2 T . T T T",
+      "target": "I -> t2 T T . T T"
+    },
+    {
+      "source": "I -> t2 T T . T T",
+      "target": "I -> t2 T T T . T"
+    },
+    {
+      "source": "I -> t2 T T T . T",
+      "target": "I -> t2 T T T T . "
+    },
+    {
+      "source": "I ->  . t3 T T T T T T T T",
+      "target": "I -> t3 . T T T T T T T T"
+    },
+    {
+      "source": "I -> t3 . T T T T T T T T",
+      "target": "I -> t3 T . T T T T T T T"
+    },
+    {
+      "source": "I -> t3 T . T T T T T T T",
+      "target": "I -> t3 T T . T T T T T T"
+    },
+    {
+      "source": "I -> t3 T T . T T T T T T",
+      "target": "I -> t3 T T T . T T T T T"
+    },
+    {
+      "source": "I -> t3 T T T . T T T T T",
+      "target": "I -> t3 T T T T . T T T T"
+    },
+    {
+      "source": "I -> t3 T T T T . T T T T",
+      "target": "I -> t3 T T T T T . T T T"
+    },
+    {
+      "source": "I -> t3 T T T T T . T T T",
+      "target": "I -> t3 T T T T T T . T T"
+    },
+    {
+      "source": "I -> t3 T T T T T T . T T",
+      "target": "I -> t3 T T T T T T T . T"
+    },
+    {
+      "source": "I -> t3 T T T T T T T . T",
+      "target": "I -> t3 T T T T T T T T . "
+    },
+    {
+      "source": "F ->  . t4 T T T T",
+      "target": "F -> t4 . T T T T"
+    },
+    {
+      "source": "F -> t4 . T T T T",
+      "target": "F -> t4 T . T T T"
+    },
+    {
+      "source": "F -> t4 T . T T T",
+      "target": "F -> t4 T T . T T"
+    },
+    {
+      "source": "F -> t4 T T . T T",
+      "target": "F -> t4 T T T . T"
+    },
+    {
+      "source": "F -> t4 T T T . T",
+      "target": "F -> t4 T T T T . "
+    },
+    {
+      "source": "F ->  . t5 T T T T T T T T",
+      "target": "F -> t5 . T T T T T T T T"
+    },
+    {
+      "source": "F -> t5 . T T T T T T T T",
+      "target": "F -> t5 T . T T T T T T T"
+    },
+    {
+      "source": "F -> t5 T . T T T T T T T",
+      "target": "F -> t5 T T . T T T T T T"
+    },
+    {
+      "source": "F -> t5 T T . T T T T T T",
+      "target": "F -> t5 T T T . T T T T T"
+    },
+    {
+      "source": "F -> t5 T T T . T T T T T",
+      "target": "F -> t5 T T T T . T T T T"
+    },
+    {
+      "source": "F -> t5 T T T T . T T T T",
+      "target": "F -> t5 T T T T T . T T T"
+    },
+    {
+      "source": "F -> t5 T T T T T . T T T",
+      "target": "F -> t5 T T T T T T . T T"
+    },
+    {
+      "source": "F -> t5 T T T T T T . T T",
+      "target": "F -> t5 T T T T T T T . T"
+    },
+    {
+      "source": "F -> t5 T T T T T T T . T",
+      "target": "F -> t5 T T T T T T T T . "
+    },
+    {
+      "source": "B ->  . t6",
+      "target": "B -> t6 . "
+    },
+    {
+      "source": "B ->  . t7",
+      "target": "B -> t7 . "
+    },
+    {
+      "source": "A ->  . t8 Ai t9",
+      "target": "A -> t8 . Ai t9"
+    },
+    {
+      "source": "A -> t8 . Ai t9",
+      "target": "A -> t8 Ai . t9"
+    },
+    {
+      "source": "A -> t8 Ai . t9",
+      "target": "A -> t8 Ai t9 . "
+    },
+    {
+      "source": "Ai ->  . V",
+      "target": "Ai -> V . "
+    },
+    {
+      "source": "Ai ->  . V",
+      "target": "V ->  . O"
+    },
+    {
+      "source": "Ai ->  . V",
+      "target": "V ->  . A"
+    },
+    {
+      "source": "Ai ->  . V",
+      "target": "V ->  . N"
+    },
+    {
+      "source": "Ai ->  . V",
+      "target": "V ->  . B"
+    },
+    {
+      "source": "Ai ->  . V",
+      "target": "V ->  . Str"
+    },
+    {
+      "source": "Ai ->  . Ai V",
+      "target": "Ai -> Ai . V"
+    },
+    {
+      "source": "Ai -> Ai . V",
+      "target": "Ai -> Ai V . "
+    },
+    {
+      "source": "Ai -> Ai . V",
+      "target": "V ->  . O"
+    },
+    {
+      "source": "Ai -> Ai . V",
+      "target": "V ->  . A"
+    },
+    {
+      "source": "Ai -> Ai . V",
+      "target": "V ->  . N"
+    },
+    {
+      "source": "Ai -> Ai . V",
+      "target": "V ->  . B"
+    },
+    {
+      "source": "Ai -> Ai . V",
+      "target": "V ->  . Str"
+    },
+    {
+      "source": "Ai ->  . e",
+      "target": "Ai -> e . "
+    },
+    {
+      "source": "O ->  . t10 Oi t11",
+      "target": "O -> t10 . Oi t11"
+    },
+    {
+      "source": "O -> t10 . Oi t11",
+      "target": "O -> t10 Oi . t11"
+    },
+    {
+      "source": "O -> t10 Oi . t11",
+      "target": "O -> t10 Oi t11 . "
+    },
+    {
+      "source": "Oi ->  . Str V",
+      "target": "Oi -> Str . V"
+    },
+    {
+      "source": "Oi -> Str . V",
+      "target": "Oi -> Str V . "
+    },
+    {
+      "source": "Oi -> Str . V",
+      "target": "V ->  . O"
+    },
+    {
+      "source": "Oi -> Str . V",
+      "target": "V ->  . A"
+    },
+    {
+      "source": "Oi -> Str . V",
+      "target": "V ->  . N"
+    },
+    {
+      "source": "Oi -> Str . V",
+      "target": "V ->  . B"
+    },
+    {
+      "source": "Oi -> Str . V",
+      "target": "V ->  . Str"
+    },
+    {
+      "source": "Oi ->  . Oi Str V",
+      "target": "Oi -> Oi . Str V"
+    },
+    {
+      "source": "Oi -> Oi . Str V",
+      "target": "Oi -> Oi Str . V"
+    },
+    {
+      "source": "Oi -> Oi Str . V",
+      "target": "Oi -> Oi Str V . "
+    },
+    {
+      "source": "Oi -> Oi Str . V",
+      "target": "V ->  . O"
+    },
+    {
+      "source": "Oi -> Oi Str . V",
+      "target": "V ->  . A"
+    },
+    {
+      "source": "Oi -> Oi Str . V",
+      "target": "V ->  . N"
+    },
+    {
+      "source": "Oi -> Oi Str . V",
+      "target": "V ->  . B"
+    },
+    {
+      "source": "Oi -> Oi Str . V",
+      "target": "V ->  . Str"
+    },
+    {
+      "source": "Oi ->  . e",
+      "target": "Oi -> e . "
+    },
+    {
+      "source": "Str ->  . t12 P 0",
+      "target": "Str -> t12 . P 0"
+    },
+    {
+      "source": "Str -> t12 . P 0",
+      "target": "Str -> t12 P . 0"
+    },
+    {
+      "source": "Str -> t12 . P 0",
+      "target": "P ->  . T0"
+    },
+    {
+      "source": "Str -> t12 . P 0",
+      "target": "P ->  . P T0"
+    },
+    {
+      "source": "Str -> t12 . P 0",
+      "target": "P ->  . e"
+    },
+    {
+      "source": "Str -> t12 P . 0",
+      "target": "Str -> t12 P 0 . "
+    },
+    {
+      "source": "P ->  . T0",
+      "target": "P -> T0 . "
+    },
+    {
+      "source": "P ->  . T0",
+      "target": "T0 ->  . k"
+    },
+    {
+      "source": "P ->  . P T0",
+      "target": "P -> P . T0"
+    },
+    {
+      "source": "P ->  . P T0",
+      "target": "P ->  . T0"
+    },
+    {
+      "source": "P ->  . P T0",
+      "target": "P ->  . P T0"
+    },
+    {
+      "source": "P ->  . P T0",
+      "target": "P ->  . e"
+    },
+    {
+      "source": "P -> P . T0",
+      "target": "P -> P T0 . "
+    },
+    {
+      "source": "P -> P . T0",
+      "target": "T0 ->  . k"
+    },
+    {
+      "source": "P ->  . e",
+      "target": "P -> e . "
+    },
+    {
+      "source": "T0 ->  . k",
+      "target": "T0 -> k . "
+    },
+    {
+      "source": "T1 ->  . 0",
+      "target": "T1 -> 0 . "
+    },
+    {
+      "source": "T1 ->  . T0",
+      "target": "T1 -> T0 . "
+    },
+    {
+      "source": "T1 ->  . T0",
+      "target": "T0 ->  . k"
+    }
+  ]
+}

@@ -12,6 +12,12 @@ fs.writeFileSync(
     './grammar/outputs/nfa.json',
     JSON.stringify(NFA, undefined, 2)
 )
+// generate NFA grafify
+fs.writeFileSync(
+	'./grammar/outputs/nfa-grafify.json',
+	JSON.stringify(convertToGrafify(NFA), undefined, 2)
+)
+console.log(NFA)
 // print some metadata
 console.log('NFA metadata', nfaMetadata(NFA))
 
@@ -35,7 +41,7 @@ fs.writeFileSync(
 )
 
 fs.writeFileSync(
-	'./grammar/outputs/grafify.json',
+	'./grammar/outputs/dfa-grafify.json',
 	JSON.stringify(convertToGrafify(DFA), undefined, 2)
 )
 
