@@ -93,9 +93,10 @@ export default (
 					)
 				break
 				case terminals.string:
+				case terminals.buffer:
 					byteIdx = 0
 					currentBuffer = []
-					currentType = 'string'
+					currentType = reverseMap[item]
 				break
 				case terminals.objectStart:
 				case terminals.arrayStart:
@@ -133,20 +134,31 @@ export default (
 			if(byteIdx >= TOKEN_MAP[currentType]) {
 				let item: any = DECODE_MAP[currentType](currentBuffer)
 				if(currentType === 'date') {
-					item = new Date(item)
+					item = new Date(Number(item))
 				}
 				onToken(item)
 			}
-		} else if(currentType === 'string' && Array.isArray(currentBuffer)) {
+		} else if(
+			(currentType === 'string' || currentType === 'buffer') && 
+			Array.isArray(currentBuffer)
+		) {
 			if(item === 0) {
-				const str = Buffer.from(currentBuffer as number[]).toString('ascii')
-				onToken(str)
+				const buff = Buffer.from(currentBuffer as number[])
+				onToken(currentType === 'buffer' ? buff : buff.toString('ascii'))
 			} else currentBuffer.push(item)
 		} else throw new Error(`unknown type running: "${currentType}"`)
 	}
 	const decodeChunk = (buffer: Buffer) => {
+		let idx = 0
 		for(const item of buffer) {
-			onByte(item)
+			try {
+				onByte(item)
+				idx += 1
+			} catch(error) {
+				console.log(buffer.slice(idx-10, idx+1))
+				throw error
+			}
+			
 		}
 	}
 	if(Buffer.isBuffer(stream)) {

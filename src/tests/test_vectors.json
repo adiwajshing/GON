@@ -24,7 +24,7 @@
 		"output": [true,false,null]
 	},
 	{
-		"input": "f0 f6-6d79206e616d65204a65666600 fa-ea f4 f5 f1",
+		"input": "f0 f66d79206e616d65204a65666600 fbea f4 f5 f1",
 		"output": ["my name Jeff",234,true,false]
 	},
 	{

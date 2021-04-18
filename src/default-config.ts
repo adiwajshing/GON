@@ -22,12 +22,8 @@ export default {
 		booleanFalse: 0xF5,
 	  
 		string: 0xF6,
+		buffer: 0xF7,
 	  
-		null: 0xD0,
-		backspace: 0xD8,
-		htab: 0xD9,
-		linefeed: 0xDA,
-		formfeed: 0xDC,
-		carriagereturn: 0xDD
+		null: 0xD0
 	  }
 } as Config

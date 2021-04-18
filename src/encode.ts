@@ -5,7 +5,7 @@ const SHORT_MAX = 1 << 16
 const INT_MAX = Number.MAX_SAFE_INTEGER
 
 export default ({terminals}: Config, obj: any, encArr: number[] = []) => {
-  const push = (...bytes: number[]) => encArr.push(...bytes)
+  const push = (byte: number) => encArr.push(byte)
   const pushInt = (long, length: number) => {
       for (let index = 0; index < length; index ++ ) {
           const byte = long & 0xff;
@@ -21,9 +21,11 @@ export default ({terminals}: Config, obj: any, encArr: number[] = []) => {
     } else if(obj === null) {
       push(terminals.null)
     } else if(typeof obj === 'string') {
-      const arr = Array.from(Buffer.from(obj, 'ascii'))
       push(terminals.string)
-      push(...arr)
+      const len = obj.length
+      for(let i = 0; i < len;i++) {
+        push(obj.charCodeAt(i))
+      }
       push(0)
     } else if(typeof obj === 'number') {
       if(obj % 1 === 0) { // it is an integer
@@ -54,9 +56,15 @@ export default ({terminals}: Config, obj: any, encArr: number[] = []) => {
   }
   const pushValue = (obj) => {
     if(typeof obj === 'object' && !!obj) {
-      if(obj instanceof Date) {
+      if(typeof obj.getTime === 'function') {
         push(terminals.date)
         pushInt(obj.getTime(), 8)
+      } else if(Buffer.isBuffer(obj)) {
+        push(terminals.buffer)
+        for(const item of obj) {
+          push(item)
+        }
+        push(0)
       } else if(Array.isArray(obj)) {
         push(terminals.arrayStart)
         for(const value of obj) {

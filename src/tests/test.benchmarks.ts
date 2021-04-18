@@ -25,9 +25,7 @@ const SERIALIZERS = [
     { name: 'json', serializer: JSONSerializer },
     { name: 'gon', serializer: GONSerializer }
 ]
-const testResults: TestType = {
-
-}
+const testResults: TestType = { }
 
 function getCount(data) {
     let count = 0;
@@ -44,11 +42,10 @@ const testSerialization = (method: string, serializer: Serializer<Buffer | strin
     let total = 0
     TEST_VECTORS.forEach ((value, i) => {
         const start = new Date()
-        console.log(value)
-        for (let i = 0; i < 5000;i++) {
-            
+        for (let i = 0; i < 1000;i++) {
             serializer.encode (value)
         }
+        
         const end = new Date()
         const diff = end.getTime()-start.getTime()
         total += diff
@@ -74,7 +71,7 @@ const testDeserialization = (method: string, serializer: Serializer<Buffer | str
     TEST_VECTORS.forEach ((value, i) => {
         const serialized = serializer.encode(value)
         const start = new Date()
-        for (let i = 0; i < 5000;i++) {
+        for (let i = 0; i < 1000;i++) {
             serializer.decode (serialized)
         }
         const end = new Date()

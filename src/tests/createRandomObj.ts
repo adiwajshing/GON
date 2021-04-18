@@ -31,7 +31,7 @@ const createRandomObj = (fieldCount?: number, allowNested?: boolean) => {
             break;
             
             case 5:
-            generatedObjField = Buffer.from( [...Array(randomInt(4096))].map(() => Math.floor(Math.random() * 256)) )
+            generatedObjField = Buffer.from( [...Array(randomInt(4096))].map(() => Math.floor(Math.random() * 254)+1) )
             break;
             
             case 6:

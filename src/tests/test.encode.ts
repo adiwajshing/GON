@@ -5,7 +5,6 @@ describe('Encoder', () => {
   it('Should encode single terminals', () => {
 
     for(const { input, output } of TEST_VECTORS) {
-      console.log(output)
       const encoded = GON.encode(output)
       let buffer: Buffer
 			if(typeof input === 'string') {
