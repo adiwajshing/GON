@@ -2,7 +2,6 @@ import { Serializer } from "../types";
 import createRandomObj from "./createRandomObj"
 import { JSONSerializer, V8Serializer } from "./Serializers";
 import GONSerializer from "..";
-import DefaultConfig from "../default-config";
 import { writeFileSync } from "fs";
 
 type TestType = {
@@ -45,7 +44,9 @@ const testSerialization = (method: string, serializer: Serializer<Buffer | strin
     let total = 0
     TEST_VECTORS.forEach ((value, i) => {
         const start = new Date()
+        console.log(value)
         for (let i = 0; i < 5000;i++) {
+            
             serializer.encode (value)
         }
         const end = new Date()

@@ -16,6 +16,7 @@ const CONTAINER_MAP = {
 }
 
 const TOKEN_MAP = {
+	'date': 8,
 	'double': 8,
 	'long': 8,
 	'int': 4,
@@ -24,12 +25,13 @@ const TOKEN_MAP = {
 	'byte': 1,
 }
 const DECODE_MAP: { [T in Terminal]?: (array: DataView) => number | bigint } = {
-	'byte': (value) => value[0],
+	'byte': (value) => value.getUint8(0),
 	'short': (value) => value.getInt16(0, true),
 	'int': (value) => value.getInt32(0, true),
 	'long': (value) => value.getBigInt64(0, true),
 	'float': (value) => value.getFloat32(0, true),
 	'double': (value) => value.getFloat64(0, true),
+	'date': (value) => value.getBigInt64(0, true),
 }
 
 export default (
@@ -45,6 +47,9 @@ export default (
 
 	const onToken = (value) => {
 		if(expectedTokenStack.length === 0) {
+			if(typeof finalValue !== 'undefined') {
+				throw new Error('recieved two tokens, not in array')
+			}
 			finalValue = value
 		} else {
 			const obj = expectedTokenStack[0]
@@ -71,12 +76,16 @@ export default (
 				case terminals.booleanFalse:
 					onToken(item === terminals.booleanTrue)
 				break
+				case terminals.null:
+					onToken(null)
+				break
 				case terminals.byte:
 				case terminals.short:
 				case terminals.int:
 				case terminals.long:
 				case terminals.float:
 				case terminals.double:
+				case terminals.date:
 					byteIdx = 0
 					currentType = reverseMap[item]
 					currentBuffer = new DataView(
@@ -120,10 +129,13 @@ export default (
 		if(TOKEN_MAP[currentType] && !Array.isArray(currentBuffer)) {
 			currentBuffer.setUint8(byteIdx, item)
 			byteIdx += 1
+			
 			if(byteIdx >= TOKEN_MAP[currentType]) {
-				onToken(
-					DECODE_MAP[currentType](currentBuffer)
-				)
+				let item: any = DECODE_MAP[currentType](currentBuffer)
+				if(currentType === 'date') {
+					item = new Date(item)
+				}
+				onToken(item)
 			}
 		} else if(currentType === 'string' && Array.isArray(currentBuffer)) {
 			if(item === 0) {

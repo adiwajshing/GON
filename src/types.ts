@@ -6,6 +6,8 @@ export type Terminals = {
 
 	objectStart: number
 	objectEnd: number
+
+	date: number
 	
 	byte: number
 	short: number

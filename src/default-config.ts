@@ -12,6 +12,8 @@ export default {
 		short: 0xFB,
 		int: 0xFC,
 		long: 0xFD,
+
+		date: 0xEF,
 	  
 		double: 0xFE,
 		float: 0xFF,
