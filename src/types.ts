@@ -27,8 +27,12 @@ export type Terminals = {
   formfeed: number
   carriagereturn: number
 }
+export type ReverseTerminalMap = {[t: number]: keyof Terminals}
 export type Config = {
 	terminals: Terminals
+}
+export type FullInternalConfig = Config & {
+	reverseMap: ReverseTerminalMap
 }
 export interface Serializer<T extends (Buffer | string)> {
 	encode (obj: any): T

@@ -5,7 +5,8 @@
   "main": "lib/index.js",
   "scripts": {
     "build": "tsc",
-    "build:watch": "tsc --watch",
+    "test:grammar": "node grammar/index",
+    "test:bench": "BENCH=1 jest -t 'Benchmark'",
     "test": "jest",
     "test:watch": "jest --watch",
     "coverage": "jest --coverage"
