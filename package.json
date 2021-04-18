@@ -5,12 +5,16 @@
   "main": "lib/index.js",
   "scripts": {
     "build": "tsc",
+    "test:grammar": "node grammar/index",
+    "test:bench": "BENCH=1 jest -t 'Benchmark'",
     "test": "jest",
-    "test:grammar": "node grammar/index"
+    "test:watch": "jest --watch",
+    "coverage": "jest --coverage"
   },
   "author": "Adhiraj Singh, Deepraj Pandey",
   "license": "MIT",
   "devDependencies": {
+    "@types/jest": "^26.0.22",
     "@types/node": "^14.14.37",
     "jest": "^26.6.3",
     "ts-jest": "^26.5.4",
