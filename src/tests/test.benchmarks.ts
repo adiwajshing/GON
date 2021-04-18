@@ -105,5 +105,9 @@ describe ('Benchmark Tests', () => {
                 testDeserialization (name, serializer, name === SERIALIZERS[SERIALIZERS.length-1].name)
             ))
         }
+    } else {
+        it('should do nothing', () => {
+            
+        })
     }
 })

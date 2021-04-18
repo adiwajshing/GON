@@ -64,76 +64,77 @@ export default (
 		}
 		currentType = undefined
 	}
+	const onByte = (item: number) => {
+		if(typeof currentType === 'undefined') {
+			switch(item) {
+				case terminals.booleanTrue:
+				case terminals.booleanFalse:
+					onToken(item === terminals.booleanTrue)
+				break
+				case terminals.byte:
+				case terminals.short:
+				case terminals.int:
+				case terminals.long:
+				case terminals.float:
+				case terminals.double:
+					byteIdx = 0
+					currentType = reverseMap[item]
+					currentBuffer = new DataView(
+						new ArrayBuffer(TOKEN_MAP[currentType])
+					)
+				break
+				case terminals.string:
+					byteIdx = 0
+					currentBuffer = []
+					currentType = 'string'
+				break
+				case terminals.objectStart:
+				case terminals.arrayStart:
+					const type = reverseMap[item]
+					const value = CONTAINER_MAP[type]()
+					if(!expectedTokenStack.length) {
+						finalValue = value
+					} else {
+						onToken(value)
+					}
+					//@ts-ignore
+					expectedTokenStack.splice(0, 0, { type, value })
+				break
+				case terminals.arrayEnd:
+				case terminals.objectEnd:
+					const obj = expectedTokenStack[0]
+					if(obj.type === 'arrayStart' && item !== terminals.arrayEnd) {
+						throw new Error('Unexpected end of array found')
+					}
+					if(obj.type === 'objectStart' && item !== terminals.objectEnd) {
+						throw new Error('Unexpected end of array found')
+					}
+					expectedTokenStack.splice(0, 1)
+				break
+				default:
+					throw new Error(`Encountered unexpected byte "${item}"`)
+			}
+			return
+		}
 
+		if(TOKEN_MAP[currentType] && !Array.isArray(currentBuffer)) {
+			currentBuffer.setUint8(byteIdx, item)
+			byteIdx += 1
+			if(byteIdx >= TOKEN_MAP[currentType]) {
+				onToken(
+					DECODE_MAP[currentType](currentBuffer)
+				)
+			}
+		} else if(currentType === 'string' && Array.isArray(currentBuffer)) {
+			if(item === 0) {
+				const str = Buffer.from(currentBuffer as number[]).toString('ascii')
+				onToken(str)
+			} else currentBuffer.push(item)
+		} else throw new Error(`unknown type running: "${currentType}"`)
+	}
 	const decodeChunk = (buffer: Buffer) => {
 		for(const item of buffer) {
-			if(typeof currentType === 'undefined') {
-				switch(item) {
-					case terminals.booleanTrue:
-					case terminals.booleanFalse:
-						onToken(item === terminals.booleanTrue)
-					break
-					case terminals.byte:
-					case terminals.short:
-					case terminals.int:
-					case terminals.long:
-					case terminals.float:
-					case terminals.double:
-						byteIdx = 0
-						currentType = reverseMap[item]
-						currentBuffer = new DataView(
-							new ArrayBuffer(TOKEN_MAP[currentType])
-						)
-					break
-					case terminals.string:
-						byteIdx = 0
-						currentBuffer = []
-						currentType = 'string'
-					break
-					case terminals.objectStart:
-					case terminals.arrayStart:
-						const type = reverseMap[item]
-						const value = CONTAINER_MAP[type]()
-						if(!expectedTokenStack.length) {
-							finalValue = value
-						} else {
-							onToken(value)
-						}
-						//@ts-ignore
-						expectedTokenStack.splice(0, 0, { type, value })
-					break
-					case terminals.arrayEnd:
-					case terminals.objectEnd:
-						const obj = expectedTokenStack[0]
-						if(obj.type === 'arrayStart' && item !== terminals.arrayEnd) {
-							throw new Error('Unexpected end of array found')
-						}
-						if(obj.type === 'objectStart' && item !== terminals.objectEnd) {
-							throw new Error('Unexpected end of array found')
-						}
-						expectedTokenStack.splice(0, 1)
-					break
-					default:
-						throw new Error(`Encountered unexpected byte "${item}"`)
-				}
-				continue
-			}
-
-			if(TOKEN_MAP[currentType] && !Array.isArray(currentBuffer)) {
-				currentBuffer.setUint8(byteIdx, item)
-				byteIdx += 1
-				if(byteIdx >= TOKEN_MAP[currentType]) {
-					onToken(
-						DECODE_MAP[currentType](currentBuffer)
-					)
-				}
-			} else if(currentType === 'string' && Array.isArray(currentBuffer)) {
-				if(item === 0) {
-					const str = Buffer.from(currentBuffer as number[]).toString('ascii')
-					console.log(str)
-					onToken(str)
-				} else currentBuffer.push(item)
-			} else throw new Error(`unknown type running: "${currentType}"`)
+			onByte(item)
 		}
 	}
 	if(Buffer.isBuffer(stream)) {
