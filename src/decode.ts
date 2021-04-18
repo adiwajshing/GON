@@ -60,6 +60,60 @@ export default (
 		),
 		len: 0
 	}
+	const onNumerical = (item: number) => {
+		byteIdx = 0
+		current = reverseMap[item]
+		defaultDataView.len = TOKEN_MAP[current]
+	}
+	const onContainerStart = (item: number) => {
+		const type = reverseMap[item]
+		const value = CONTAINER_MAP[type]()
+		if(!expectedTokenStack.length) {
+			finalValue = value
+		} else {
+			onToken(value)
+		}
+		//@ts-ignore
+		expectedTokenStack.push({ type, value })
+	}
+	const onContainerEnd = (item: number) => {
+		const obj = expectedTokenStack[expectedTokenStack.length-1]
+		if(obj.type === 'arrayStart' && item !== terminals.arrayEnd) {
+			throw new Error('Unexpected end of array found')
+		}
+		if(obj.type === 'objectStart' && item !== terminals.objectEnd) {
+			throw new Error('Unexpected end of array found')
+		}
+		expectedTokenStack.pop()
+	}
+	const functionMap = {
+		[terminals.booleanTrue]: () => onToken(true),
+		[terminals.booleanFalse]: () => onToken(false),
+		[terminals.null]: () => onToken(null), 
+		[terminals.string]: () => {
+			byteIdx = 0
+			current = 'string'
+			defaultString = ''
+		},
+		[terminals.buffer]: () => {
+			byteIdx = 0
+			current = 'buffer'
+			defaultBuffer.reset()
+		},
+		[terminals.byte]: onNumerical,
+		[terminals.short]: onNumerical,
+		[terminals.int]: onNumerical,
+		[terminals.long]: onNumerical,
+		[terminals.date]: onNumerical,
+		[terminals.float]: onNumerical,
+		[terminals.double]: onNumerical,
+
+		[terminals.arrayStart]: onContainerStart,
+		[terminals.objectStart]: onContainerStart,
+
+		[terminals.arrayEnd]: onContainerEnd,
+		[terminals.objectEnd]: onContainerEnd,
+	}
 	let defaultString = ''
 	let byteIdx = 0
 
@@ -95,82 +149,22 @@ export default (
 	}
 	const onByte = function(item: number) {
 		if(!current) {
-			switch(item) {
-				case terminals.booleanTrue:
-				case terminals.booleanFalse:
-					onToken(item === terminals.booleanTrue)
-				break
-				case terminals.null:
-					onToken(null)
-				break
-				case terminals.byte:
-				case terminals.short:
-				case terminals.int:
-				case terminals.long:
-				case terminals.float:
-				case terminals.double:
-				case terminals.date:
-					byteIdx = 0
-					current = reverseMap[item]
-					defaultDataView.len = TOKEN_MAP[current]
-				break
-				case terminals.string:
-					byteIdx = 0
-					current = 'string'
-					defaultString = ''
-				break
-				case terminals.buffer:
-					byteIdx = 0
-					current = 'buffer'
-					defaultBuffer.reset()
-				break
-				case terminals.objectStart:
-				case terminals.arrayStart:
-					const type = reverseMap[item]
-					const value = CONTAINER_MAP[type]()
-					if(!expectedTokenStack.length) {
-						finalValue = value
-					} else {
-						onToken(value)
-					}
-					//@ts-ignore
-					expectedTokenStack.push({ type, value })
-				break
-				case terminals.arrayEnd:
-				case terminals.objectEnd:
-					const obj = expectedTokenStack[expectedTokenStack.length-1]
-					if(obj.type === 'arrayStart' && item !== terminals.arrayEnd) {
-						throw new Error('Unexpected end of array found')
-					}
-					if(obj.type === 'objectStart' && item !== terminals.objectEnd) {
-						throw new Error('Unexpected end of array found')
-					}
-					expectedTokenStack.pop()
-				break
-				default:
-					throw new Error(`Encountered unexpected byte "${item}"`)
+			functionMap[item](item)
+		} else if(current === 'string') {
+			if(item === 0) onToken(defaultString) 
+			else defaultString += String.fromCharCode(item)
+		} else if(current === 'buffer') {
+			if(item === 0) onToken(defaultBuffer.getBuffer()) 
+			else defaultBuffer.push(item)
+		} else {
+			defaultDataView.view.setUint8(byteIdx, item)
+			byteIdx += 1
+			
+			if(byteIdx >= defaultDataView.len) {
+				onToken(
+					DECODE_MAP[current](defaultDataView.view)
+				)
 			}
-			return
-		}
-		switch(current) {
-			case 'string':
-				if(item === 0) onToken(defaultString) 
-				else defaultString += String.fromCharCode(item)
-			break
-			case 'buffer':
-				if(item === 0) onToken(defaultBuffer.getBuffer()) 
-				else defaultBuffer.push(item)
-			break
-			default:
-				defaultDataView.view.setUint8(byteIdx, item)
-				byteIdx += 1
-				
-				if(byteIdx >= defaultDataView.len) {
-					onToken(
-						DECODE_MAP[current](defaultDataView.view)
-					)
-				}
-			break
 		}
 	}
 	const decodeChunk = (buffer: Buffer) => {
