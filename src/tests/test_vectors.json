@@ -4,7 +4,7 @@
 		"output": "my name Jeff"
 	},
 	{
-		"input": "fbea00",
+		"input": "fa ea",
 		"output": 234
 	},
 	{
@@ -16,15 +16,19 @@
 		"output": false
 	},
 	{
-		"input": "f0f4f5f1",
-		"output": [true,false]
+		"input": "d0",
+		"output": null
 	},
 	{
-		"input": "f0f66d79206e616d65204a65666600fbea00f4f5f1",
+		"input": "f0f4f5d0f1",
+		"output": [true,false,null]
+	},
+	{
+		"input": "f0 f66d79206e616d65204a65666600 fbea f4 f5 f1",
 		"output": ["my name Jeff",234,true,false]
 	},
 	{
-		"input": "f0 f6-6d79206e616d65204a65666600 f0 f4 f5 f1 fb-ea00 f4 f5 f1",
+		"input": "f0 f6-6d79206e616d65204a65666600 f0 f4 f5 f1 fa-ea f4 f5 f1",
 		"output": ["my name Jeff",[true,false],234,true,false]
 	},
 	{
