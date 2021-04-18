@@ -2,8 +2,7 @@ import GON from ".."
 import TEST_VECTORS from './test_vectors.json'
 
 describe('Encoder', () => {
-  it('Should encode single terminals', () => {
-
+  it('Should encode', () => {
     for(const { input, output } of TEST_VECTORS) {
       const encoded = GON.encode(output)
       let buffer: Buffer

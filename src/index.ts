@@ -11,11 +11,7 @@ export const makeGONSerializer = (config: Config) => {
 									), { })
 	const fullConfig: FullInternalConfig = { ...config, reverseMap }
 	return {
-		encode: (value: any) => {
-			const encArr: number[] = []
-			encode(config, value, encArr)
-			return Buffer.from(encArr)
-		},
+		encode: (value: any) => encode(config, value),
 		decode: (value: Readable | Buffer) => decode(fullConfig, value),
 		contentType: 'application/octet-stream'
 	} as GONSerializer
