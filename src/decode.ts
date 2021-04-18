@@ -10,9 +10,6 @@ type StackItem = {
 	type: 'arrayStart'
 	value: any[]
 }
-const CONTAINER_TOKENS = new Set<Terminal>(
-	['objectStart', 'arrayStart']
-)
 const CONTAINER_MAP = {
 	'objectStart': () => ({ }),
 	'arrayStart': () => []

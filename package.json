@@ -6,6 +6,7 @@
   "scripts": {
     "build": "tsc",
     "test:grammar": "node grammar/index",
+    "test:bench": "BENCH=1 jest -t 'Benchmark'",
     "test": "jest",
     "test:watch": "jest --watch",
     "coverage": "jest --coverage"

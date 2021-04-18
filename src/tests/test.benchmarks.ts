@@ -24,7 +24,7 @@ const TEST_VECTORS = [...Array(10)].map(() => createRandomObj())
 const SERIALIZERS = [
     { name: 'V8', serializer: V8Serializer },
     { name: 'json', serializer: JSONSerializer },
-    { name: 'gon', serializer: GONSerializer(DefaultConfig) }
+    { name: 'gon', serializer: GONSerializer }
 ]
 const testResults: TestType = {
 
@@ -71,7 +71,7 @@ const testSerialization = (method: string, serializer: Serializer<Buffer | strin
 const testDeserialization = (method: string, serializer: Serializer<Buffer | string>, print: boolean) => {
     let total = 0
     TEST_VECTORS.forEach ((value, i) => {
-        const serialized = serializer.encode (value)
+        const serialized = serializer.encode(value)
         const start = new Date()
         for (let i = 0; i < 5000;i++) {
             serializer.decode (serialized)
@@ -96,12 +96,14 @@ const testDeserialization = (method: string, serializer: Serializer<Buffer | str
 }
 
 describe ('Benchmark Tests', () => {
-    for(const { name, serializer } of SERIALIZERS) {
-        it(`should measure ${name} serialization`, () => (
-            testSerialization(name, serializer)
-        ))
-        it(`should measure ${name} de-serialization`, () => (
-            testDeserialization (name, serializer, name === SERIALIZERS[SERIALIZERS.length-1].name)
-        ))
+    if(process.env.BENCH === '1') {
+        for(const { name, serializer } of SERIALIZERS) {
+            it(`should measure ${name} serialization`, () => (
+                testSerialization(name, serializer)
+            ))
+            it(`should measure ${name} de-serialization`, () => (
+                testDeserialization (name, serializer, name === SERIALIZERS[SERIALIZERS.length-1].name)
+            ))
+        }
     }
 })
