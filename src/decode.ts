@@ -1,4 +1,5 @@
 import { Readable } from "stream";
+import tableDoublingBuffer, { TableDoublingBuffer } from "./table-doubling-buffer";
 import { FullInternalConfig, Terminals } from "./types";
 
 type Terminal = keyof Terminals
@@ -9,6 +10,16 @@ type StackItem = {
 } | {
 	type: 'arrayStart'
 	value: any[]
+}
+type Item = {
+	type: 'string'
+	value: string
+} | {
+	type: 'buffer'
+	value: TableDoublingBuffer
+} | {
+	type: 'date' | 'double' | 'long' | 'int' | 'float' | 'short' | 'byte'
+	value: DataView
 }
 const CONTAINER_MAP = {
 	'objectStart': () => ({ }),
@@ -24,14 +35,16 @@ const TOKEN_MAP = {
 	'short': 2,
 	'byte': 1,
 }
-const DECODE_MAP: { [T in Terminal]?: (array: DataView) => number | bigint } = {
+const DECODE_MAP: { [T in Terminal]?: (array: DataView) => number | bigint | Date } = {
 	'byte': (value) => value.getUint8(0),
 	'short': (value) => value.getInt16(0, true),
 	'int': (value) => value.getInt32(0, true),
 	'long': (value) => value.getBigInt64(0, true),
 	'float': (value) => value.getFloat32(0, true),
 	'double': (value) => value.getFloat64(0, true),
-	'date': (value) => value.getBigInt64(0, true),
+	'date': (value) => new Date(
+		Number(value.getBigInt64(0, true))
+	),
 }
 
 export default (
@@ -39,11 +52,22 @@ export default (
 	stream: Readable | Buffer
 ) => {
 	let finalValue: any
+	// reused items
+	const defaultBuffer = tableDoublingBuffer(256)
+	const defaultDataView = {
+		view: new DataView(
+			new ArrayBuffer(8)
+		),
+		len: 0
+	}
+	let defaultString = ''
+	let byteIdx = 0
 
 	const expectedTokenStack: StackItem[] = []
-	let currentType: Terminal
-	let currentBuffer: number[] | DataView
-	let byteIdx = 0
+	let current: Terminal
+	
+	let i = 0
+	let len = 0
 
 	const onToken = (value) => {
 		if(expectedTokenStack.length === 0) {
@@ -52,13 +76,13 @@ export default (
 			}
 			finalValue = value
 		} else {
-			const obj = expectedTokenStack[0]
+			const obj = expectedTokenStack[expectedTokenStack.length-1]
 			if(obj.type === 'arrayStart') {
 				obj.value.push(value)
 			} else {
 				if(!obj.nextKey) {
 					if(typeof value !== 'string') {
-						throw new Error('Expected string key in object')
+						throw new Error(`Expected string key in object, but got: "${typeof value}"`)
 					}
 					obj.nextKey = value 
 				} else {
@@ -67,10 +91,10 @@ export default (
 				}
 			}
 		}
-		currentType = undefined
+		current = undefined
 	}
-	const onByte = (item: number) => {
-		if(typeof currentType === 'undefined') {
+	const onByte = function(item: number) {
+		if(!current) {
 			switch(item) {
 				case terminals.booleanTrue:
 				case terminals.booleanFalse:
@@ -87,16 +111,18 @@ export default (
 				case terminals.double:
 				case terminals.date:
 					byteIdx = 0
-					currentType = reverseMap[item]
-					currentBuffer = new DataView(
-						new ArrayBuffer(TOKEN_MAP[currentType])
-					)
+					current = reverseMap[item]
+					defaultDataView.len = TOKEN_MAP[current]
 				break
 				case terminals.string:
+					byteIdx = 0
+					current = 'string'
+					defaultString = ''
+				break
 				case terminals.buffer:
 					byteIdx = 0
-					currentBuffer = []
-					currentType = reverseMap[item]
+					current = 'buffer'
+					defaultBuffer.reset()
 				break
 				case terminals.objectStart:
 				case terminals.arrayStart:
@@ -108,57 +134,51 @@ export default (
 						onToken(value)
 					}
 					//@ts-ignore
-					expectedTokenStack.splice(0, 0, { type, value })
+					expectedTokenStack.push({ type, value })
 				break
 				case terminals.arrayEnd:
 				case terminals.objectEnd:
-					const obj = expectedTokenStack[0]
+					const obj = expectedTokenStack[expectedTokenStack.length-1]
 					if(obj.type === 'arrayStart' && item !== terminals.arrayEnd) {
 						throw new Error('Unexpected end of array found')
 					}
 					if(obj.type === 'objectStart' && item !== terminals.objectEnd) {
 						throw new Error('Unexpected end of array found')
 					}
-					expectedTokenStack.splice(0, 1)
+					expectedTokenStack.pop()
 				break
 				default:
 					throw new Error(`Encountered unexpected byte "${item}"`)
 			}
 			return
 		}
-
-		if(TOKEN_MAP[currentType] && !Array.isArray(currentBuffer)) {
-			currentBuffer.setUint8(byteIdx, item)
-			byteIdx += 1
-			
-			if(byteIdx >= TOKEN_MAP[currentType]) {
-				let item: any = DECODE_MAP[currentType](currentBuffer)
-				if(currentType === 'date') {
-					item = new Date(Number(item))
+		switch(current) {
+			case 'string':
+				if(item === 0) onToken(defaultString) 
+				else defaultString += String.fromCharCode(item)
+			break
+			case 'buffer':
+				if(item === 0) onToken(defaultBuffer.getBuffer()) 
+				else defaultBuffer.push(item)
+			break
+			default:
+				defaultDataView.view.setUint8(byteIdx, item)
+				byteIdx += 1
+				
+				if(byteIdx >= defaultDataView.len) {
+					onToken(
+						DECODE_MAP[current](defaultDataView.view)
+					)
 				}
-				onToken(item)
-			}
-		} else if(
-			(currentType === 'string' || currentType === 'buffer') && 
-			Array.isArray(currentBuffer)
-		) {
-			if(item === 0) {
-				const buff = Buffer.from(currentBuffer as number[])
-				onToken(currentType === 'buffer' ? buff : buff.toString('ascii'))
-			} else currentBuffer.push(item)
-		} else throw new Error(`unknown type running: "${currentType}"`)
+			break
+		}
 	}
 	const decodeChunk = (buffer: Buffer) => {
-		let idx = 0
-		for(const item of buffer) {
-			try {
-				onByte(item)
-				idx += 1
-			} catch(error) {
-				console.log(buffer.slice(idx-10, idx+1))
-				throw error
-			}
-			
+		i = 0
+		len = buffer.length
+		while(i < len) {
+			onByte(buffer[i])
+			i++
 		}
 	}
 	if(Buffer.isBuffer(stream)) {
