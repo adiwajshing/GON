@@ -18,8 +18,8 @@ type TestType = {
         }
     }
 }
-
-const TEST_VECTORS = [...Array(10)].map(() => createRandomObj())
+const ITERATIONS = 750
+const TEST_VECTORS = [...Array(15)].map(() => createRandomObj())
 const SERIALIZERS = [
     { name: 'V8', serializer: V8Serializer },
     { name: 'json', serializer: JSONSerializer },
@@ -42,7 +42,7 @@ const testSerialization = (method: string, serializer: Serializer<Buffer | strin
     let total = 0
     TEST_VECTORS.forEach ((value, i) => {
         const start = new Date()
-        for (let i = 0; i < 1000;i++) {
+        for (let i = 0; i < ITERATIONS;i++) {
             serializer.encode (value)
         }
         
@@ -71,7 +71,7 @@ const testDeserialization = (method: string, serializer: Serializer<Buffer | str
     TEST_VECTORS.forEach ((value, i) => {
         const serialized = serializer.encode(value)
         const start = new Date()
-        for (let i = 0; i < 1000;i++) {
+        for (let i = 0; i < ITERATIONS;i++) {
             serializer.decode (serialized)
         }
         const end = new Date()

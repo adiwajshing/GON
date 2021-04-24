@@ -1,35 +1,32 @@
-import { Readable, Stream } from "stream"
+import { Readable } from "stream"
 
-export type Terminals = {
-	arrayStart: number
-	arrayEnd: number
+export enum TerminalTypes {
+	arrayStart = 1,
+	arrayEnd = 2,
 
-	objectStart: number
-	objectEnd: number
+	objectStart = 3,
+	objectEnd = 4,
 
-	date: number
+	date = 5,
 
-	byte: number
-	short: number
-	int: number
-	long: number
+	byte = 6,
+	short = 7,
+	int = 8,
+	long = 9,
 
-	float: number
-	double: number
+	float = 10,
+	double = 11,
 
-	booleanTrue: number
-	booleanFalse: number
+	booleanTrue = 12,
+	booleanFalse = 13,
 
-	string: number
-	buffer: number
+	string = 14,
+	buffer = 15,
 
-	null: number
-	backspace: number
-	htab: number
-	linefeed: number
-	formfeed: number
-	carriagereturn: number
+	null = 16
 }
+
+export type Terminals = { [V in TerminalTypes]: number }
 export type ReverseTerminalMap = { [t: number]: keyof Terminals }
 export type Config = {
 	terminals: Terminals

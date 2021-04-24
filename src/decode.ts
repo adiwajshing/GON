@@ -1,48 +1,38 @@
 import { Readable } from "stream";
-import tableDoublingBuffer, { TableDoublingBuffer } from "./table-doubling-buffer";
-import { FullInternalConfig, Terminals } from "./types";
+import tableDoublingBuffer from "./table-doubling-buffer";
+import { FullInternalConfig, Terminals, TerminalTypes } from "./types";
 
 type Terminal = keyof Terminals
 type StackItem = {
-	type: 'objectStart'
+	type: TerminalTypes.objectStart
 	value: { [_: string]: any }
 	nextKey?: string
 } | {
-	type: 'arrayStart'
+	type: TerminalTypes.arrayStart
 	value: any[]
 }
-type Item = {
-	type: 'string'
-	value: string
-} | {
-	type: 'buffer'
-	value: TableDoublingBuffer
-} | {
-	type: 'date' | 'double' | 'long' | 'int' | 'float' | 'short' | 'byte'
-	value: DataView
-}
 const CONTAINER_MAP = {
-	'objectStart': () => ({ }),
-	'arrayStart': () => []
+	[TerminalTypes.objectStart]: () => ({ }),
+	[TerminalTypes.arrayStart]: () => []
 }
 
 const TOKEN_MAP = {
-	'date': 8,
-	'double': 8,
-	'long': 8,
-	'int': 4,
-	'float': 4,
-	'short': 2,
-	'byte': 1,
+	[TerminalTypes.long]: 8,
+	[TerminalTypes.double]: 8,
+	[TerminalTypes.date]: 8,
+	[TerminalTypes.int]: 4,
+	[TerminalTypes.float]: 4,
+	[TerminalTypes.short]: 2,
+	[TerminalTypes.byte]: 1,
 }
 const DECODE_MAP: { [T in Terminal]?: (array: DataView) => number | bigint | Date } = {
-	'byte': (value) => value.getUint8(0),
-	'short': (value) => value.getInt16(0, true),
-	'int': (value) => value.getInt32(0, true),
-	'long': (value) => value.getBigInt64(0, true),
-	'float': (value) => value.getFloat32(0, true),
-	'double': (value) => value.getFloat64(0, true),
-	'date': (value) => new Date(
+	[TerminalTypes.byte]: (value) => value.getUint8(0),
+	[TerminalTypes.short]: (value) => value.getInt16(0, true),
+	[TerminalTypes.int]: (value) => value.getInt32(0, true),
+	[TerminalTypes.long]: (value) => value.getBigInt64(0, true),
+	[TerminalTypes.float]: (value) => value.getFloat32(0, true),
+	[TerminalTypes.double]: (value) => value.getFloat64(0, true),
+	[TerminalTypes.date]: (value) => new Date(
 		Number(value.getBigInt64(0, true))
 	),
 }
@@ -68,52 +58,48 @@ export default (
 	const onContainerStart = (item: number) => {
 		const type = reverseMap[item]
 		const value = CONTAINER_MAP[type]()
-		if(!expectedTokenStack.length) {
-			finalValue = value
-		} else {
-			onToken(value)
-		}
+		onToken(value)
 		//@ts-ignore
 		expectedTokenStack.push({ type, value })
 	}
 	const onContainerEnd = (item: number) => {
 		const obj = expectedTokenStack[expectedTokenStack.length-1]
-		if(obj.type === 'arrayStart' && item !== terminals.arrayEnd) {
-			throw new Error('Unexpected end of array found')
-		}
-		if(obj.type === 'objectStart' && item !== terminals.objectEnd) {
-			throw new Error('Unexpected end of array found')
+		if(
+			(obj.type === TerminalTypes.arrayStart && item !== terminals[TerminalTypes.arrayEnd]) ||
+			(obj.type === TerminalTypes.objectStart && item !== terminals[TerminalTypes.objectEnd])
+		) {
+			throw new Error('Unexpected end of container found')
 		}
 		expectedTokenStack.pop()
 	}
-	const functionMap = {
-		[terminals.booleanTrue]: () => onToken(true),
-		[terminals.booleanFalse]: () => onToken(false),
-		[terminals.null]: () => onToken(null), 
-		[terminals.string]: () => {
-			byteIdx = 0
-			current = 'string'
-			defaultString = ''
-		},
-		[terminals.buffer]: () => {
-			byteIdx = 0
-			current = 'buffer'
-			defaultBuffer.reset()
-		},
-		[terminals.byte]: onNumerical,
-		[terminals.short]: onNumerical,
-		[terminals.int]: onNumerical,
-		[terminals.long]: onNumerical,
-		[terminals.date]: onNumerical,
-		[terminals.float]: onNumerical,
-		[terminals.double]: onNumerical,
-
-		[terminals.arrayStart]: onContainerStart,
-		[terminals.objectStart]: onContainerStart,
-
-		[terminals.arrayEnd]: onContainerEnd,
-		[terminals.objectEnd]: onContainerEnd,
+	const functionMap: ((i: number) => void)[] = new Array(256)
+	functionMap[terminals[TerminalTypes.booleanTrue]] = () => onToken(true)
+	functionMap[terminals[TerminalTypes.booleanFalse]] = () => onToken(false)
+	functionMap[terminals[TerminalTypes.null]] = () => onToken(null)
+	functionMap[terminals[TerminalTypes.string]] = () => {
+		byteIdx = 0
+		current = TerminalTypes.string
+		defaultString = ''
 	}
+	functionMap[terminals[TerminalTypes.buffer]] = () => {
+		byteIdx = 0
+		current = TerminalTypes.buffer
+		defaultBuffer.reset()
+	}
+	functionMap[terminals[TerminalTypes.byte]] = onNumerical
+	functionMap[terminals[TerminalTypes.short]] = onNumerical
+	functionMap[terminals[TerminalTypes.int]] = onNumerical
+	functionMap[terminals[TerminalTypes.long]] = onNumerical
+	functionMap[terminals[TerminalTypes.date]] = onNumerical
+	functionMap[terminals[TerminalTypes.float]] = onNumerical
+	functionMap[terminals[TerminalTypes.double]] = onNumerical
+
+	functionMap[terminals[TerminalTypes.arrayStart]] = onContainerStart
+	functionMap[terminals[TerminalTypes.objectStart]] = onContainerStart
+
+	functionMap[terminals[TerminalTypes.arrayEnd]] = onContainerEnd
+	functionMap[terminals[TerminalTypes.objectEnd]] = onContainerEnd
+
 	let defaultString = ''
 	let byteIdx = 0
 
@@ -124,25 +110,16 @@ export default (
 	let len = 0
 
 	const onToken = (value) => {
-		if(expectedTokenStack.length === 0) {
-			if(typeof finalValue !== 'undefined') {
-				throw new Error('recieved two tokens, not in array')
-			}
-			finalValue = value
-		} else {
-			const obj = expectedTokenStack[expectedTokenStack.length-1]
-			if(obj.type === 'arrayStart') {
-				obj.value.push(value)
+		finalValue = finalValue || value
+		const obj = expectedTokenStack[expectedTokenStack.length-1]
+		if(obj?.type === TerminalTypes.arrayStart) {
+			obj.value.push(value)
+		} else if(obj?.type === TerminalTypes.objectStart) {
+			if(!obj.nextKey) {
+				obj.nextKey = value 
 			} else {
-				if(!obj.nextKey) {
-					if(typeof value !== 'string') {
-						throw new Error(`Expected string key in object, but got: "${typeof value}"`)
-					}
-					obj.nextKey = value 
-				} else {
-					obj.value[obj.nextKey] = value
-					obj.nextKey = undefined
-				}
+				obj.value[obj.nextKey] = value
+				obj.nextKey = undefined
 			}
 		}
 		current = undefined
@@ -150,10 +127,10 @@ export default (
 	const onByte = function(item: number) {
 		if(!current) {
 			functionMap[item](item)
-		} else if(current === 'string') {
+		} else if(current === TerminalTypes.string) {
 			if(item === 0) onToken(defaultString) 
 			else defaultString += String.fromCharCode(item)
-		} else if(current === 'buffer') {
+		} else if(current === TerminalTypes.buffer) {
 			if(item === 0) onToken(defaultBuffer.getBuffer()) 
 			else defaultBuffer.push(item)
 		} else {

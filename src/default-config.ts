@@ -1,29 +1,29 @@
-import { Config } from "./types";
+import { Config, TerminalTypes } from "./types";
 
 export default {
 	terminals: {
-		arrayStart: 0xF0,
-		arrayEnd: 0xF1,
+		[TerminalTypes.arrayStart]: 0xF0,
+		[TerminalTypes.arrayEnd]: 0xF1,
 	  
-		objectStart: 0xF2,
-		objectEnd: 0xF3,
+		[TerminalTypes.objectStart]: 0xF2,
+		[TerminalTypes.objectEnd]: 0xF3,
 		
-		byte: 0xFA,
-		short: 0xFB,
-		int: 0xFC,
-		long: 0xFD,
+		[TerminalTypes.byte]: 0xFA,
+		[TerminalTypes.short]: 0xFB,
+		[TerminalTypes.int]: 0xFC,
+		[TerminalTypes.long]: 0xFD,
 
-		date: 0xEF,
+		[TerminalTypes.date]: 0xEF,
 	  
-		double: 0xFE,
-		float: 0xFF,
+		[TerminalTypes.double]: 0xFE,
+		[TerminalTypes.float]: 0xFF,
 	  
-		booleanTrue: 0xF4,
-		booleanFalse: 0xF5,
+		[TerminalTypes.booleanTrue]: 0xF4,
+		[TerminalTypes.booleanFalse]: 0xF5,
 	  
-		string: 0xF6,
-		buffer: 0xF7,
+		[TerminalTypes.string]: 0xF6,
+		[TerminalTypes.buffer]: 0xF7,
 	  
-		null: 0xD0
+		[TerminalTypes.null]: 0xD0
 	  }
 } as Config

@@ -1,5 +1,5 @@
 import tableDoublingBuffer from './table-doubling-buffer';
-import { Config } from './types';
+import { Config, TerminalTypes } from './types';
 
 const BYTE_MAX = 1 << 8
 const SHORT_MAX = 1 << 16
@@ -10,24 +10,7 @@ const INT_MAX = Number.MAX_SAFE_INTEGER
  */
 
 export default ({
-  terminals: {
-    arrayStart,
-    arrayEnd,
-    objectEnd,
-    objectStart,
-    booleanTrue,
-    booleanFalse,
-    string,
-    null: nullToken,
-    byte,
-    short,
-    int,
-    long,
-    float,
-    double,
-    date,
-    buffer
-  }
+  terminals
 }: Config, obj: any) => {
   const buff = tableDoublingBuffer(512)
   
@@ -46,12 +29,14 @@ export default ({
   const pushToken = (obj) => {
     if(typeof obj === 'boolean') {
       push(
-        obj ? booleanTrue : booleanFalse
+        obj ? 
+        terminals[TerminalTypes.booleanTrue] : 
+        terminals[TerminalTypes.booleanFalse]
       )
     } else if(obj === null) {
-      push(nullToken)
+      push(terminals[TerminalTypes.null])
     } else if(typeof obj === 'string') {
-      push(string)
+      push(terminals[TerminalTypes.string])
       len = obj.length
       i = 0
       while(i < len) {
@@ -62,20 +47,20 @@ export default ({
     } else if(typeof obj === 'number') {
       if(obj % 1 === 0) { // it is an integer
         if(-BYTE_MAX < obj && obj < BYTE_MAX) {
-          push(byte)
+          push(terminals[TerminalTypes.byte])
           push(obj)
         } else if(-SHORT_MAX < obj && obj < SHORT_MAX) {
-          push(short)
+          push(terminals[TerminalTypes.short])
           pushInt(obj, 2)
         } else if(-INT_MAX <= obj && obj <= INT_MAX) {
-          push(int)
+          push(terminals[TerminalTypes.int])
           pushInt(obj, 4)
         } else {
-          push(long)
+          push(terminals[TerminalTypes.long])
           pushInt(obj, 8)
         }
       } else {
-        push(double)
+        push(terminals[TerminalTypes.double])
         const dataView = new DataView(new ArrayBuffer(8))
         dataView.setFloat64(0, obj)
         i = 0
@@ -92,10 +77,10 @@ export default ({
   const pushValue = (obj) => {
     if(typeof obj === 'object' && !!obj) {
       if(typeof obj.getTime === 'function') {
-        push(date)
+        push(terminals[TerminalTypes.date])
         pushInt(obj.getTime(), 8)
       } else if(Buffer.isBuffer(obj)) {
-        push(buffer)
+        push(terminals[TerminalTypes.buffer])
         len = obj.length
         i = 0
         while(i < len) {
@@ -104,7 +89,7 @@ export default ({
         }
         push(0)
       } else if(Array.isArray(obj)) {
-        push(arrayStart)
+        push(terminals[TerminalTypes.arrayStart])
 
         const len = obj.length
         let i = 0
@@ -113,9 +98,9 @@ export default ({
           i ++
         }
 
-        push(arrayEnd)
+        push(terminals[TerminalTypes.arrayEnd])
       } else {
-        push(objectStart)
+        push(terminals[TerminalTypes.objectStart])
 
         const keys = Object.keys(obj)
         const len = keys.length
@@ -128,7 +113,7 @@ export default ({
           i ++
         }
 
-        push(objectEnd)
+        push(terminals[TerminalTypes.objectEnd])
       }
     } else {
       pushToken(obj)
